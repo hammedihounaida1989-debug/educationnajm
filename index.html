@@ -2,7 +2,9 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>
@@ -231,18 +233,6 @@ class="fixed inset-0 bg-gradient-to-br from-blue-100 to-yellow-50 flex items-cen
 
       </div>
 
-      <div class="bg-gradient-to-br from-yellow-100 to-yellow-50 rounded-3xl p-6 text-center shadow-inner border border-yellow-200">
-
-        <div class="text-5xl mb-3 text-blue-600">
-          ❝
-        </div>
-
-        <p class="text-slate-600 leading-9 text-lg font-semibold">
-          التعليم هو مفتاح المستقبل
-        </p>
-
-      </div>
-
     </aside>
 
     <!-- MAIN -->
@@ -301,14 +291,6 @@ class="fixed inset-0 bg-gradient-to-br from-blue-100 to-yellow-50 flex items-cen
 
         </div>
 
-        <div class="text-center mb-8">
-
-          <h1 class="text-5xl font-black text-blue-900 mb-3">
-            التعليم هو مفتاح المستقبل
-          </h1>
-
-        </div>
-
         <div
           id="levels-list"
           class="flex gap-3 overflow-x-auto pb-3 mb-8">
@@ -354,17 +336,16 @@ class="fixed inset-0 bg-gradient-to-br from-blue-100 to-yellow-50 flex items-cen
 const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "123456";
 
-document.getElementById('platform').style.display = 'none';
+document.getElementById('platform').style.display='none';
 
-document
-.getElementById('login-btn')
+document.getElementById('login-btn')
 .addEventListener('click',()=>{
 
   const username =
-    document.getElementById('admin-username').value;
+  document.getElementById('admin-username').value;
 
   const password =
-    document.getElementById('admin-password').value;
+  document.getElementById('admin-password').value;
 
   if(
     username === ADMIN_USERNAME &&
@@ -384,21 +365,130 @@ document
 
 });
 
-/* SUPABASE */
+/* ELEMENTS */
 
-const SUPABASE_URL =
-'https://orrmwdjebfawekoqbjrx.supabase.co';
+const homeBtn =
+document.getElementById('home-btn');
 
-const SUPABASE_KEY =
-'sb_publishable_foc4DXyMgwjQ1JMM3kzrQA_ybbbia7X';
+const homePage =
+document.getElementById('home-page');
 
-const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const subjectsPage =
+document.getElementById('subjects-page');
 
-/* باقي الجافاسكربت الخاص بالرفع والحذف والتحميل يبقى كما هو */
+const toggleSubjectsBtn =
+document.getElementById('toggle-subjects');
+
+const levelPage =
+document.getElementById('level-page');
+
+const levelsList =
+document.getElementById('levels-list');
+
+const backToLevels =
+document.getElementById('back-to-levels');
+
+/* NAVIGATION */
+
+homeBtn.addEventListener('click',(e)=>{
+
+  e.preventDefault();
+
+  homePage.classList.remove('hidden');
+
+  subjectsPage.classList.add('hidden');
+
+});
+
+toggleSubjectsBtn.addEventListener('click',(e)=>{
+
+  e.preventDefault();
+
+  homePage.classList.add('hidden');
+
+  subjectsPage.classList.remove('hidden');
+
+});
+
+backToLevels.addEventListener('click',()=>{
+
+  levelPage.classList.add('hidden');
+
+  levelsList.classList.remove('hidden');
+
+});
+
+/* LOGO SAVE */
+
+const logoInput =
+document.getElementById('logo-input');
+
+const sidebarLogo =
+document.getElementById('sidebar-logo');
+
+const mainLogo =
+document.getElementById('main-logo');
+
+function loadSavedLogo(){
+
+  const savedLogo =
+  localStorage.getItem('platformLogo');
+
+  if(savedLogo){
+
+    sidebarLogo.innerHTML = `
+      <img
+      src="${savedLogo}"
+      class="w-full h-full object-cover">
+    `;
+
+    mainLogo.innerHTML = `
+      <img
+      src="${savedLogo}"
+      class="w-full h-full object-contain rounded-[25px]">
+    `;
+
+  }
+
+}
+
+logoInput.addEventListener('change',(e)=>{
+
+  const file = e.target.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(event){
+
+    const imageSrc =
+    event.target.result;
+
+    localStorage.setItem(
+      'platformLogo',
+      imageSrc
+    );
+
+    sidebarLogo.innerHTML = `
+      <img
+      src="${imageSrc}"
+      class="w-full h-full object-cover">
+    `;
+
+    mainLogo.innerHTML = `
+      <img
+      src="${imageSrc}"
+      class="w-full h-full object-contain rounded-[25px]">
+    `;
+
+  };
+
+  reader.readAsDataURL(file);
+
+});
+
+loadSavedLogo();
 
 </script>
 
