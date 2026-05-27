@@ -243,37 +243,74 @@ function createSubjectCard(subjectName){
         ملفات ودروس المادة
       </p>
 
-      <div class="grid gap-3">
+      <!-- المجلدات -->
 
-        <button class="bg-blue-100 text-blue-700 py-3 rounded-2xl font-bold">
-          📘 الدروس
-        </button>
+      <div class="grid gap-3 mb-5">
 
-        <button class="bg-yellow-100 text-yellow-700 py-3 rounded-2xl font-bold">
-          📝 التمارين
-        </button>
+        <div class="folder-box bg-blue-50 rounded-2xl p-4">
 
-        <button class="bg-red-100 text-red-700 py-3 rounded-2xl font-bold">
-          📄 الاختبارات
-        </button>
+          <div class="flex items-center justify-between mb-3">
 
-        <button class="bg-green-100 text-green-700 py-3 rounded-2xl font-bold">
-          🎥 الفيديوهات
-        </button>
+            <h4 class="font-black text-blue-700">
+              📘 الدروس
+            </h4>
+
+            <button
+              class="upload-btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold">
+
+              رفع
+
+            </button>
+
+          </div>
+
+          <div class="files-list space-y-2"></div>
+
+        </div>
+
+        <div class="folder-box bg-yellow-50 rounded-2xl p-4">
+
+          <div class="flex items-center justify-between mb-3">
+
+            <h4 class="font-black text-yellow-700">
+              📝 التمارين
+            </h4>
+
+            <button
+              class="upload-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm font-bold">
+
+              رفع
+
+            </button>
+
+          </div>
+
+          <div class="files-list space-y-2"></div>
+
+        </div>
+
+        <div class="folder-box bg-red-50 rounded-2xl p-4">
+
+          <div class="flex items-center justify-between mb-3">
+
+            <h4 class="font-black text-red-700">
+              📄 الاختبارات
+            </h4>
+
+            <button
+              class="upload-btn bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold">
+
+              رفع
+
+            </button>
+
+          </div>
+
+          <div class="files-list space-y-2"></div>
+
+        </div>
 
       </div>
-
-      <div class="mt-6">
-
-        <button class="upload-btn bg-blue-600 hover:bg-blue-700 text-white w-full py-3 rounded-2xl font-black transition">
-
-          ⬆️ رفع الملفات
-
-        </button>
-
-      </div>
-
-      <div class="files-list mt-5 space-y-3"></div>
 
     </div>
 
@@ -285,27 +322,97 @@ function createSubjectCard(subjectName){
 /* RENDER SUBJECTS */
 /* ========================= */
 
-function renderSubjects(levelName){
+/* رفع الملفات */
 
-  levelPage.classList.remove('hidden');
+function attachUploadEvents(){
 
-  levelsList.classList.add('hidden');
+  document
+  .querySelectorAll('.upload-btn')
+  .forEach((button)=>{
 
-  levelTitle.textContent = levelName;
+    button.onclick = null;
 
-  const subjects =
-  subjectsByLevel[levelName] || [];
+    button.addEventListener('click',()=>{
 
-  levelSubjectsContainer.innerHTML = '';
+      const input =
+      document.createElement('input');
 
-  subjects.forEach(subject=>{
+      input.type = 'file';
 
-    levelSubjectsContainer.innerHTML +=
-    createSubjectCard(subject);
+      input.accept =
+      '.pdf,.doc,.docx,.png,.jpg,.jpeg,.mp4';
+
+      input.addEventListener('change',(e)=>{
+
+        const file =
+        e.target.files[0];
+
+        if(!file) return;
+
+        const fileURL =
+        URL.createObjectURL(file);
+
+        const folder =
+        button.closest('.folder-box');
+
+        const filesList =
+        folder.querySelector('.files-list');
+
+        const item =
+        document.createElement('div');
+
+        item.className =
+        'bg-white rounded-xl p-3 flex items-center justify-between gap-3 border';
+
+        item.innerHTML = `
+
+          <a
+            href="${fileURL}"
+            target="_blank"
+            class="text-blue-700 font-bold break-all flex-1 hover:underline">
+
+            📄 ${file.name}
+
+          </a>
+
+          <div class="flex gap-2">
+
+            <a
+              href="${fileURL}"
+              download="${file.name}"
+              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-bold">
+
+              تحميل
+
+            </a>
+
+            <button
+              class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm font-bold">
+
+              🗑️
+
+            </button>
+
+          </div>
+
+        `;
+
+        item.querySelector('.delete-btn')
+        .addEventListener('click',()=>{
+
+          item.remove();
+
+        });
+
+        filesList.appendChild(item);
+
+      });
+
+      input.click();
+
+    });
 
   });
-
-  attachUploadEvents();
 
 }
 
