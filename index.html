@@ -115,7 +115,41 @@ class="hidden text-red-500 text-center mt-4 font-bold">
 </div>
 
 </div>
+<div class="mt-8 border-t pt-6">
 
+<h2 class="text-2xl font-black text-green-700 text-center mb-4">
+دخول التلاميذ
+</h2>
+
+<input
+id="student-name"
+type="text"
+placeholder="اسم التلميذ"
+class="w-full border-2 border-slate-200 rounded-2xl px-5 py-4 mb-4">
+
+<input
+id="student-password"
+type="password"
+placeholder="كلمة المرور"
+class="w-full border-2 border-slate-200 rounded-2xl px-5 py-4 mb-4">
+
+<button
+id="student-login-btn"
+class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-black">
+
+دخول التلميذ
+
+</button>
+
+<p
+id="student-error"
+class="hidden text-red-500 text-center mt-3 font-bold">
+
+بيانات التلميذ غير صحيحة
+
+</p>
+
+</div>
 <!-- PLATFORM -->
 
 <div id="platform" class="hidden min-h-screen glass">
@@ -323,7 +357,78 @@ document
 }
 
 });
+const students = [
 
+{
+name:"ahmed",
+password:"123"
+},
+
+{
+name:"sara",
+password:"456"
+},
+
+{
+name:"mohamed",
+password:"789"
+}
+
+];
+
+document
+.getElementById('student-login-btn')
+.addEventListener('click',()=>{
+
+const studentName =
+document.getElementById('student-name')
+.value
+.trim();
+
+const studentPassword =
+document.getElementById('student-password')
+.value
+.trim();
+
+const foundStudent =
+students.find(student =>
+
+student.name === studentName &&
+student.password === studentPassword
+
+);
+
+if(foundStudent){
+
+document
+.getElementById('login-page')
+.classList.add('hidden');
+
+document
+.getElementById('platform')
+.classList.remove('hidden');
+
+setTimeout(()=>{
+
+document
+.querySelectorAll('.upload-btn')
+.forEach(btn=>{
+
+btn.style.display='none';
+
+});
+
+},500);
+
+}else{
+
+document
+.getElementById('student-error')
+.classList.remove('hidden');
+
+}
+
+});
 /* NAVIGATION */
 
 const homeBtn =
