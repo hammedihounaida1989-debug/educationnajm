@@ -3,9 +3,9 @@
 
 <head>
 
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
 نجم الدين همادي - التعليم هو مفتاح المستقبل
@@ -291,10 +291,9 @@ class="flex gap-3 overflow-x-auto pb-3 mb-8">
 const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "123456";
 
-const loginBtn =
-document.getElementById('login-btn');
-
-loginBtn.addEventListener('click',()=>{
+document
+.getElementById('login-btn')
+.addEventListener('click',()=>{
 
 const username =
 document.getElementById('admin-username').value;
@@ -307,15 +306,18 @@ username === ADMIN_USERNAME &&
 password === ADMIN_PASSWORD
 ){
 
-document.getElementById('login-page')
+document
+.getElementById('login-page')
 .classList.add('hidden');
 
-document.getElementById('platform')
+document
+.getElementById('platform')
 .classList.remove('hidden');
 
 }else{
 
-document.getElementById('login-error')
+document
+.getElementById('login-error')
 .classList.remove('hidden');
 
 }
@@ -594,6 +596,8 @@ createSubjectCard(subject);
 
 attachUploadEvents();
 
+renderSavedFiles();
+
 }
 
 backToLevels.addEventListener('click',()=>{
@@ -604,14 +608,15 @@ levelsList.classList.remove('hidden');
 
 });
 
-const levelButtons =
-document.querySelectorAll('.level-btn');
-
-levelButtons.forEach((btn)=>{
+document
+.querySelectorAll('.level-btn')
+.forEach((btn)=>{
 
 btn.addEventListener('click',()=>{
 
-levelButtons.forEach((b)=>{
+document
+.querySelectorAll('.level-btn')
+.forEach((b)=>{
 
 b.classList.remove('active-level');
 
@@ -655,14 +660,100 @@ e.target.files[0];
 
 if(!file) return;
 
-const fileURL =
-window.URL.createObjectURL(file);
+const reader =
+new FileReader();
+
+reader.onload = function(event){
+
+const fileData =
+event.target.result;
 
 const folder =
 button.closest('.folder-box');
 
+const folderName =
+folder.querySelector('h4').textContent.trim();
+
+const subjectName =
+button.closest('.card-hover')
+.querySelector('h3')
+.textContent.trim();
+
+const levelName =
+document.getElementById('level-title')
+.textContent.trim();
+
+const filesKey =
+`${levelName}-${subjectName}-${folderName}`;
+
+const savedFiles =
+JSON.parse(
+localStorage.getItem(filesKey)
+|| '[]'
+);
+
+savedFiles.push({
+
+name:file.name,
+data:fileData
+
+});
+
+localStorage.setItem(
+filesKey,
+JSON.stringify(savedFiles)
+);
+
+renderSavedFiles();
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+input.click();
+
+});
+
+});
+
+}
+
+function renderSavedFiles(){
+
+document
+.querySelectorAll('.folder-box')
+.forEach((folder)=>{
+
 const filesList =
 folder.querySelector('.files-list');
+
+filesList.innerHTML = '';
+
+const folderName =
+folder.querySelector('h4')
+.textContent.trim();
+
+const subjectName =
+folder.closest('.card-hover')
+.querySelector('h3')
+.textContent.trim();
+
+const levelName =
+document.getElementById('level-title')
+.textContent.trim();
+
+const filesKey =
+`${levelName}-${subjectName}-${folderName}`;
+
+const savedFiles =
+JSON.parse(
+localStorage.getItem(filesKey)
+|| '[]'
+);
+
+savedFiles.forEach((file,index)=>{
 
 const item =
 document.createElement('div');
@@ -682,7 +773,7 @@ class="open-file text-blue-700 font-bold flex-1 break-all text-right hover:under
 <div class="flex gap-2">
 
 <a
-href="${fileURL}"
+href="${file.data}"
 download="${file.name}"
 class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-bold">
 
@@ -704,22 +795,25 @@ class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg te
 item.querySelector('.open-file')
 .addEventListener('click',()=>{
 
-window.open(fileURL,'_blank');
+window.open(file.data,'_blank');
 
 });
 
 item.querySelector('.delete-btn')
 .addEventListener('click',()=>{
 
-item.remove();
+savedFiles.splice(index,1);
+
+localStorage.setItem(
+filesKey,
+JSON.stringify(savedFiles)
+);
+
+renderSavedFiles();
 
 });
 
 filesList.appendChild(item);
-
-});
-
-input.click();
 
 });
 
