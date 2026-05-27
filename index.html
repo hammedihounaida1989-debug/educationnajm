@@ -877,9 +877,12 @@ class="open-file text-blue-700 font-bold flex-1 break-all text-right hover:under
 
 <div class="flex gap-2">
 
-<a
-href="${file.data}"
-download="${file.name}"
+<button
+class="download-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-bold">
+
+تحميل
+
+</button>
 class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-bold">
 
 تحميل
@@ -1055,7 +1058,23 @@ JSON.stringify(savedFiles)
 renderSavedFiles();
 
 });
+const downloadBtn =
+item.querySelector('.download-btn');
 
+downloadBtn.addEventListener('click',()=>{
+
+currentDownloadLink = {
+
+url:file.data,
+name:file.name
+
+};
+
+document
+.getElementById('download-login-modal')
+.classList.remove('hidden');
+
+});
 filesList.appendChild(item);
 
 });
@@ -1063,7 +1082,60 @@ filesList.appendChild(item);
 });
 
 }
+document
+.getElementById('download-login-btn')
+.addEventListener('click',()=>{
 
+const studentName =
+document
+.getElementById('download-student-name')
+.value
+.trim();
+
+const studentPassword =
+document
+.getElementById('download-student-password')
+.value
+.trim();
+
+const foundStudent =
+students.find(student =>
+
+student.name === studentName &&
+student.password === studentPassword
+
+);
+
+if(foundStudent){
+
+const link =
+document.createElement('a');
+
+link.href =
+currentDownloadLink.url;
+
+link.download =
+currentDownloadLink.name;
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+document
+.getElementById('download-login-modal')
+.classList.add('hidden');
+
+}else{
+
+document
+.getElementById('download-error')
+.classList.remove('hidden');
+
+}
+
+});
 </script>
 
 </body>
