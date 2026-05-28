@@ -860,11 +860,10 @@ localStorage.getItem(filesKey)
 
 savedFiles.forEach((file,index)=>{
 
-const item =
-document.createElement('div');
+const item = document.createElement('div');
 
 item.className =
-'bg-white rounded-2xl p-4 border border-slate-200 flex items-center';
+'bg-white rounded-2xl p-4 border border-slate-200 mb-3';
 
 item.innerHTML = `
 
@@ -907,7 +906,21 @@ class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-xl te
 </div>
 
 `;
+item.querySelector('.download-btn')
+.addEventListener('click',()=>{
 
+currentDownloadLink = {
+
+url:file.data,
+name:file.name
+
+};
+
+document
+.getElementById('download-login-modal')
+.classList.remove('hidden');
+
+});
 item.querySelector('.open-file')
 .addEventListener('click',()=>{
 
