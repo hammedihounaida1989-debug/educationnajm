@@ -482,9 +482,11 @@ levelsList.classList.remove('hidden');
 
 <script type="module">
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import { createClient }
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-const SUPABASE_URL = 'https://orrmwdjebfawekocbjrx.supabase.co';
+const SUPABASE_URL =
+'https://orrmwdjebfawekocbjrx.supabase.co';
 
 const SUPABASE_KEY =
 'sb_publishable_foc4DXyMgwjQ1JMM3kzrQA_ybbbia7X';
@@ -501,61 +503,25 @@ document.getElementById('main-logo');
 const logoInput =
 document.getElementById('logo-input');
 
-/* تحميل الشعار */
-
-async function loadSavedLogo(){
-
-const { data,error } =
-await supabase.storage
-.from('school-files')
-.list('logo',{
-limit:1
-});
-
-if(error){
-console.log(error);
-return;
-}
-
-if(data && data.length > 0){
-
-const logoName = data[0].name;
-
-const logoUrl =
-`${SUPABASE_URL}/storage/v1/object/public/school-files/logo/${logoName}`;
-
-sidebarLogo.innerHTML =
-`<img src="${logoUrl}" class="w-full h-full object-cover">`;
-
-mainLogo.innerHTML =
-`<img src="${logoUrl}" class="w-full h-full object-contain rounded-[25px]">`;
-
-}
-
-}
-
 /* رفع الشعار */
 
-logoInput.addEventListener('change', async(e)=>{
+logoInput.addEventListener('change', async (e)=>{
+
+try{
 
 const file = e.target.files[0];
 
 if(!file) return;
 
-try{
-
 const filePath =
-`logo/${Date.now()}-${file.name.replaceAll(' ','-')}`;
+`logo-${Date.now()}-${file.name}`;
 
 const { error } =
 await supabase.storage
 .from('school-files')
-.upload(filePath,file,{
-upsert:true
-});
+.upload(filePath, file);
 
 if(error){
-console.log(error);
 alert(error.message);
 return;
 }
@@ -565,21 +531,17 @@ supabase.storage
 .from('school-files')
 .getPublicUrl(filePath);
 
-const imageUrl = data.publicUrl;
-
 sidebarLogo.innerHTML =
-`<img src="${imageUrl}" class="w-full h-full object-cover">`;
+`<img src="${data.publicUrl}" class="w-full h-full object-cover">`;
 
 mainLogo.innerHTML =
-`<img src="${imageUrl}" class="w-full h-full object-contain rounded-[25px]">`;
+`<img src="${data.publicUrl}" class="w-full h-full object-contain rounded-[25px]">`;
 
 alert('تم رفع الشعار بنجاح');
 
 }catch(err){
 
-console.log(err);
-
-alert('فشل رفع الشعار');
+alert(err.message);
 
 }
 
@@ -587,44 +549,42 @@ alert('فشل رفع الشعار');
 
 /* رفع الملفات */
 
-async function uploadFileToSupabase(
-file,
-levelName,
-subjectName,
-folderName
-){
+window.attachUploadEvents = function(){
 
-const safeLevel =
-levelName.replaceAll(' ','-');
+document.querySelectorAll('.upload-btn')
+.forEach((button)=>{
 
-const safeSubject =
-subjectName.replaceAll(' ','-');
+button.onclick = null;
 
-const safeFolder =
-folderName.replaceAll(' ','-');
+button.addEventListener('click',()=>{
 
-const safeFileName =
-file.name.replaceAll(' ','-');
+const input =
+document.createElement('input');
 
-const filePath =
-`${safeLevel}/${safeSubject}/${safeFolder}/${Date.now()}-${safeFileName}`;
+input.type = 'file';
+
+input.accept =
+'.pdf,.doc,.docx,.png,.jpg,.jpeg,.mp4';
+
+input.addEventListener('change', async(e)=>{
 
 try{
+
+const file = e.target.files[0];
+
+if(!file) return;
+
+const filePath =
+`${Date.now()}-${file.name}`;
 
 const { error } =
 await supabase.storage
 .from('school-files')
-.upload(filePath,file,{
-upsert:true
-});
+.upload(filePath, file);
 
 if(error){
-
-console.log(error);
-
 alert(error.message);
-
-return null;
+return;
 }
 
 const { data } =
@@ -632,20 +592,25 @@ supabase.storage
 .from('school-files')
 .getPublicUrl(filePath);
 
-return {
-url:data.publicUrl,
-name:file.name
-};
+alert('تم رفع الملف بنجاح');
+
+console.log(data.publicUrl);
+
+renderSavedFiles();
 
 }catch(err){
 
-console.log(err);
-
-alert('فشل رفع الملف');
-
-return null;
+alert(err.message);
 
 }
+
+});
+
+input.click();
+
+});
+
+});
 
 }
 
@@ -653,8 +618,68 @@ return null;
 
 window.renderSavedFiles = async function(){
 
+document.querySelectorAll('.files-list')
+.forEach(list=> list.innerHTML='');
+
+const { data, error } =
+await supabase.storage
+.from('school-files')
+.list('', { limit:100 });
+
+if(error){
+console.log(error);
+return;
+}
+
 document.querySelectorAll('.folder-box')
-.forEach(async(folder)=>{
+.forEach((folder)=>{
+
+const filesList =
+folder.querySelector('.files-list');
+
+data.forEach((file)=>{
+
+const fileUrl =
+`${SUPABASE_URL}/storage/v1/object/public/school-files/${file.name}`;
+
+const item =
+document.createElement('div');
+
+item.className =
+'bg-white rounded-2xl p-4 border border-slate-200 mt-2';
+
+item.innerHTML = `
+<div class="flex justify-between items-center">
+<p class="font-bold text-blue-700">
+${file.name}
+</p>
+
+<div class="flex gap-2">
+
+<button class="bg-blue-600 text-white px-3 py-2 rounded-xl">
+فتح
+</button>
+
+</div>
+</div>
+`;
+
+item.querySelector('button')
+.addEventListener('click',()=>{
+
+window.open(fileUrl,'_blank');
+
+});
+
+filesList.appendChild(item);
+
+});
+
+});
+
+}
+
+</script>
 
 const filesList =
 folder.querySelector('.files-list');
