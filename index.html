@@ -278,9 +278,11 @@ levelsList.classList.remove('hidden');
 
 <script type="module">
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import { createClient }
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-const SUPABASE_URL = 'https://orrmwdjebfawekocbjrx.supabase.co';
+const SUPABASE_URL =
+'https://orrmwdjebfawekocbjrx.supabase.co';
 
 const SUPABASE_KEY =
 'sb_publishable_foc4DXyMgwjQ1JMM3kzrQA_ybbbia7X';
@@ -288,32 +290,16 @@ const SUPABASE_KEY =
 const supabase =
 createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const sidebarLogo = document.getElementById('sidebar-logo');
-const mainLogo = document.getElementById('main-logo');
-const logoInput = document.getElementById('logo-input');
+const sidebarLogo =
+document.getElementById('sidebar-logo');
 
-async function loadSavedLogo(){
+const mainLogo =
+document.getElementById('main-logo');
 
-const { data } =
-await supabase.storage
-.from('school-files')
-.list('logo',{ limit:1 });
+const logoInput =
+document.getElementById('logo-input');
 
-if(data && data.length > 0){
-
-const logoFile = data[0].name;
-
-const logoUrl =
-`${SUPABASE_URL}/storage/v1/object/public/school-files/logo/${logoFile}`;
-
-sidebarLogo.innerHTML =
-`<img src="${logoUrl}" class="w-full h-full object-cover">`;
-
-mainLogo.innerHTML =
-`<img src="${logoUrl}" class="w-full h-full object-contain rounded-[25px]">`;
-
-}
-}
+/* رفع الشعار */
 
 logoInput.addEventListener('change', async (e)=>{
 
@@ -322,15 +308,21 @@ const file = e.target.files[0];
 if(!file) return;
 
 const filePath =
-`logo/${Date.now()}-${file.name}`;
+`logo/logo-${Date.now()}-${file.name}`;
 
 const { error } =
 await supabase.storage
 .from('school-files')
-.upload(filePath,file,{ upsert:true });
+.upload(filePath,file,{
+upsert:true
+});
 
 if(error){
+
+console.log(error);
+
 alert(error.message);
+
 return;
 }
 
@@ -351,18 +343,49 @@ alert('تم رفع الشعار بنجاح');
 
 });
 
-async function uploadFileToSupabase(file,levelName,subjectName,folderName){
+/* رفع الملفات */
+
+async function uploadFileToSupabase(
+file,
+levelName,
+subjectName,
+folderName
+){
+
+if(folderName.includes('الدروس')){
+folderName = 'lessons';
+}
+
+if(folderName.includes('التمارين')){
+folderName = 'exercises';
+}
+
+if(folderName.includes('الاختبارات')){
+folderName = 'tests';
+}
+
+const safeLevel =
+levelName.replaceAll(' ','-');
+
+const safeSubject =
+subjectName.replaceAll(' ','-');
 
 const filePath =
-`${levelName}/${subjectName}/${folderName}/${Date.now()}-${file.name}`;
+`${safeLevel}/${safeSubject}/${folderName}/${Date.now()}-${file.name}`;
 
 const { error } =
 await supabase.storage
 .from('school-files')
-.upload(filePath,file,{ upsert:true });
+.upload(filePath,file,{
+upsert:true
+});
 
 if(error){
+
+console.log(error);
+
 alert(error.message);
+
 return null;
 }
 
@@ -375,8 +398,13 @@ return {
 url:data.publicUrl,
 name:file.name
 };
+
 }
 
+window.uploadFileToSupabase =
+uploadFileToSupabase;
+
+</script>
 window.renderSavedFiles = async function(){
 
 document.querySelectorAll('.folder-box').forEach(async(folder)=>{
