@@ -1,4 +1,425 @@
+# النسخة النهائية للمشروع
+
+استبدل ملف `index.html` بالكامل بهذا الكود النهائي الجاهز للرفع على GitHub و Vercel.
+
+```html
 <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نجم الدين همادي - التعليم هو مفتاح المستقبل</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+font-family:'Noto Naskh Arabic',serif;
+box-sizing:border-box;
+}
+
+body{
+min-height:100vh;
+background:
+radial-gradient(circle at top right, rgba(59,130,246,0.18), transparent 25%),
+radial-gradient(circle at bottom left, rgba(234,179,8,0.18), transparent 30%),
+linear-gradient(135deg,#f0fdf4 0%,#eff6ff 40%,#ffffff 100%);
+background-attachment:fixed;
+overflow-x:hidden;
+}
+
+.glass{
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(18px);
+}
+
+.card-hover{
+transition:0.3s;
+}
+
+.card-hover:hover{
+transform:translateY(-5px);
+box-shadow:0 15px 30px rgba(0,0,0,0.08);
+}
+
+.active-level{
+background:#bbf7d0;
+color:#166534;
+border:2px solid #86efac;
+}
+
+.sidebar-link:hover{
+background:#fff7d6;
+color:#b7791f;
+}
+</style>
+</head>
+
+<body>
+
+<div id="login-page" class="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-blue-100 to-yellow-50 z-50 p-4">
+
+<div class="bg-white w-full max-w-md rounded-[35px] p-8 shadow-2xl">
+
+<h1 class="text-4xl font-black text-center text-blue-900 mb-3">
+تسجيل دخول المدير
+</h1>
+
+<p class="text-center text-slate-500 mb-8">
+التعليم هو مفتاح المستقبل
+</p>
+
+<input id="admin-username" type="text" placeholder="اسم المستخدم" class="w-full border-2 border-slate-200 rounded-2xl px-5 py-4 mb-4">
+
+<input id="admin-password" type="password" placeholder="كلمة المرور" class="w-full border-2 border-slate-200 rounded-2xl px-5 py-4 mb-6">
+
+<button id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black">
+دخول المدير
+</button>
+
+<p id="login-error" class="hidden text-red-500 text-center mt-4 font-bold">
+معلومات الدخول غير صحيحة
+</p>
+
+</div>
+</div>
+
+<div id="platform" class="hidden min-h-screen glass">
+<div class="grid lg:grid-cols-[320px_1fr] min-h-screen">
+
+<aside class="bg-yellow-50 border-l border-yellow-100 p-6">
+
+<div class="text-center mb-10">
+
+<div id="sidebar-logo" class="w-32 h-32 mx-auto rounded-[30px] bg-white flex items-center justify-center shadow-xl overflow-hidden text-7xl">
+⭐
+</div>
+
+<label class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl cursor-pointer font-bold text-sm">
+تغيير الشعار
+<input type="file" id="logo-input" accept="image/*" class="hidden">
+</label>
+
+<h1 class="text-3xl font-extrabold text-blue-900 mt-5">
+نجم الدين همادي
+</h1>
+
+<p class="text-slate-500 mt-2">
+التعليم هو مفتاح المستقبل
+</p>
+</div>
+
+<nav class="space-y-3">
+
+<a href="#" id="home-btn" class="sidebar-link flex items-center justify-between bg-blue-50 text-blue-700 px-5 py-4 rounded-2xl font-bold">
+<span>الرئيسية</span>
+<span>🏠</span>
+</a>
+
+<a href="#" id="toggle-subjects" class="sidebar-link flex items-center justify-between px-5 py-4 rounded-2xl font-bold">
+<span>المواد</span>
+<span>📚</span>
+</a>
+
+</nav>
+</aside>
+
+<main class="p-6 md:p-10">
+
+<div id="home-page" class="flex flex-col items-center justify-center text-center py-10">
+
+<div id="main-logo" class="w-[350px] md:w-[500px] bg-white rounded-[40px] shadow-2xl border-8 border-blue-100 overflow-hidden p-10 flex items-center justify-center mb-8">
+<div class="text-[180px]">⭐</div>
+</div>
+
+<h1 class="text-5xl font-black text-blue-900 mb-4">
+نجم الدين همادي
+</h1>
+
+<p class="text-2xl text-yellow-500 font-black">
+التعليم هو مفتاح المستقبل
+</p>
+</div>
+
+<div id="subjects-page" class="hidden">
+
+<div id="level-page" class="hidden bg-white rounded-[35px] p-8 shadow-xl border border-green-100 mb-10">
+
+<button id="back-to-levels" class="mb-6 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-5 py-3 rounded-2xl font-bold">
+← العودة
+</button>
+
+<h2 id="level-title" class="text-5xl font-black text-green-700 mb-8 text-center"></h2>
+
+<div id="level-subjects-container" class="grid md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
+</div>
+
+<div id="levels-list" class="flex gap-3 overflow-x-auto pb-3 mb-8">
+
+<button class="level-btn active-level px-7 py-3 rounded-full font-bold border-2 border-green-200">السنة الأولى</button>
+<button class="level-btn bg-green-50 border border-green-200 px-7 py-3 rounded-full font-bold text-green-700">السنة الثانية</button>
+<button class="level-btn bg-green-50 border border-green-200 px-7 py-3 rounded-full font-bold text-green-700">السنة الثالثة</button>
+<button class="level-btn bg-green-50 border border-green-200 px-7 py-3 rounded-full font-bold text-green-700">السنة الرابعة</button>
+<button class="level-btn bg-green-50 border border-green-200 px-7 py-3 rounded-full font-bold text-green-700">السنة الخامسة</button>
+<button class="level-btn bg-green-50 border border-green-200 px-7 py-3 rounded-full font-bold text-green-700">السنة السادسة</button>
+
+</div>
+</div>
+</main>
+</div>
+</div>
+
+<script>
+
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "123456";
+
+const homePage = document.getElementById('home-page');
+const subjectsPage = document.getElementById('subjects-page');
+
+const subjectsByLevel = {
+'السنة الأولى':['الرياضيات','اللغة العربية','الإيقاظ العلمي'],
+'السنة الثانية':['الرياضيات','اللغة العربية','الإيقاظ العلمي'],
+'السنة الثالثة':['الرياضيات','اللغة العربية','الفرنسية'],
+'السنة الرابعة':['الرياضيات','اللغة العربية','الفرنسية'],
+'السنة الخامسة':['الرياضيات','اللغة العربية','الفرنسية'],
+'السنة السادسة':['الرياضيات','اللغة العربية','الفرنسية']
+};
+
+function createFolder(title,color){
+return `
+<div class="folder-box bg-${color}-50 rounded-2xl p-4">
+<div class="flex justify-between items-center mb-3">
+<h4 class="font-black text-${color}-700">${title}</h4>
+<button class="upload-btn bg-${color}-600 text-white px-4 py-2 rounded-xl text-sm font-bold">رفع</button>
+</div>
+<div class="files-list space-y-2"></div>
+</div>
+`;
+}
+
+function createSubjectCard(subjectName){
+return `
+<div class="card-hover bg-white rounded-[30px] p-7 border border-slate-100 shadow-sm">
+<h3 class="text-3xl font-black text-blue-900 mb-5">${subjectName}</h3>
+<div class="grid gap-4">
+${createFolder('الدروس','blue')}
+${createFolder('التمارين','yellow')}
+${createFolder('الاختبارات','red')}
+</div>
+</div>
+`;
+}
+
+document.getElementById('login-btn').addEventListener('click',()=>{
+
+const username = document.getElementById('admin-username').value;
+const password = document.getElementById('admin-password').value;
+
+if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+
+document.getElementById('login-page').classList.add('hidden');
+document.getElementById('platform').classList.remove('hidden');
+
+}else{
+document.getElementById('login-error').classList.remove('hidden');
+}
+});
+
+document.getElementById('home-btn').addEventListener('click',(e)=>{
+e.preventDefault();
+homePage.classList.remove('hidden');
+subjectsPage.classList.add('hidden');
+});
+
+document.getElementById('toggle-subjects').addEventListener('click',(e)=>{
+e.preventDefault();
+homePage.classList.add('hidden');
+subjectsPage.classList.remove('hidden');
+});
+
+const levelPage = document.getElementById('level-page');
+const levelsList = document.getElementById('levels-list');
+const levelTitle = document.getElementById('level-title');
+const levelSubjectsContainer = document.getElementById('level-subjects-container');
+
+function renderSubjects(levelName){
+
+levelPage.classList.remove('hidden');
+levelsList.classList.add('hidden');
+
+levelTitle.textContent = levelName;
+levelSubjectsContainer.innerHTML='';
+
+subjectsByLevel[levelName].forEach(subject=>{
+levelSubjectsContainer.innerHTML += createSubjectCard(subject);
+});
+
+attachUploadEvents();
+renderSavedFiles();
+}
+
+document.querySelectorAll('.level-btn').forEach((btn)=>{
+btn.addEventListener('click',()=>{
+renderSubjects(btn.textContent.trim());
+});
+});
+
+document.getElementById('back-to-levels').addEventListener('click',()=>{
+levelPage.classList.add('hidden');
+levelsList.classList.remove('hidden');
+});
+
+</script>
+
+<script type="module">
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+const SUPABASE_URL = 'https://orrmwdjebfawekocbjrx.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_foc4DXyMgwjQ1JMM3kzrQA_ybbbia7X';
+
+const supabase =
+createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const sidebarLogo = document.getElementById('sidebar-logo');
+const mainLogo = document.getElementById('main-logo');
+const logoInput = document.getElementById('logo-input');
+
+async function loadSavedLogo(){
+
+const { data } =
+await supabase.storage
+.from('school-files')
+.list('logo',{ limit:1 });
+
+if(data && data.length > 0){
+
+const logoFile = data[0].name;
+
+const logoUrl =
+`${SUPABASE_URL}/storage/v1/object/public/school-files/logo/${logoFile}`;
+
+sidebarLogo.innerHTML =
+`<img src="${logoUrl}" class="w-full h-full object-cover">`;
+
+mainLogo.innerHTML =
+`<img src="${logoUrl}" class="w-full h-full object-contain rounded-[25px]">`;
+
+}
+}
+
+logoInput.addEventListener('change', async (e)=>{
+
+const file = e.target.files[0];
+
+if(!file) return;
+
+const filePath =
+`logo/${Date.now()}-${file.name}`;
+
+const { error } =
+await supabase.storage
+.from('school-files')
+.upload(filePath,file,{ upsert:true });
+
+if(error){
+alert(error.message);
+return;
+}
+
+const { data } =
+supabase.storage
+.from('school-files')
+.getPublicUrl(filePath);
+
+const imageUrl = data.publicUrl;
+
+sidebarLogo.innerHTML =
+`<img src="${imageUrl}" class="w-full h-full object-cover">`;
+
+mainLogo.innerHTML =
+`<img src="${imageUrl}" class="w-full h-full object-contain rounded-[25px]">`;
+
+alert('تم رفع الشعار بنجاح');
+
+});
+
+async function uploadFileToSupabase(file,levelName,subjectName,folderName){
+
+const filePath =
+`${levelName}/${subjectName}/${folderName}/${Date.now()}-${file.name}`;
+
+const { error } =
+await supabase.storage
+.from('school-files')
+.upload(filePath,file,{ upsert:true });
+
+if(error){
+alert(error.message);
+return null;
+}
+
+const { data } =
+supabase.storage
+.from('school-files')
+.getPublicUrl(filePath);
+
+return {
+url:data.publicUrl,
+name:file.name
+};
+}
+
+window.renderSavedFiles = async function(){
+
+document.querySelectorAll('.folder-box').forEach(async(folder)=>{
+
+const filesList = folder.querySelector('.files-list');
+
+filesList.innerHTML = '';
+
+const folderName =
+folder.querySelector('h4').textContent.trim();
+
+const subjectName =
+folder.closest('.card-hover')
+.querySelector('h3')
+.textContent.trim();
+
+const levelName =
+document.getElementById('level-title')
+.textContent.trim();
+
+const folderPath =
+`${levelName}/${subjectName}/${folderName}`;
+
+const { data } =
+await supabase.storage
+.from('school-files')
+.list(folderPath,{ limit:100 });
+
+if(!data) return;
+
+data.forEach((file)=>{
+
+const fileUrl =
+`${SUPABASE_URL}/storage/v1/object/public/school-files/${folderPath}/${file.name}`;
+
+const item = document.createElement('div');
+
+item.className =
+'bg-white rounded-2xl p-4 border border-slate-200';
+
+item.innerHTML = `
+<div class="flex justify-between items-center gap-3">
+<p class="font-bold text-blue-700 flex-1 overflow-hidden whitespace-nowrap text-ellipsis">
 ${file.name}
 </p>
 <div class="flex gap-2">
@@ -86,3 +507,23 @@ loadSavedLogo();
 
 </body>
 </html>
+```
+
+## خطوات الرفع على GitHub
+
+1. افتح مشروعك
+2. استبدل ملف index.html بالكامل
+3. احفظ الملف
+4. ارفع المشروع إلى GitHub
+5. انتظر Vercel يعيد النشر
+6. جرّب رفع الشعار والملفات
+
+## إعدادات Supabase المطلوبة
+
+اسم الـ Bucket يجب أن يكون:
+
+```txt
+school-files
+```
+
+ويجب أن يكون Public.
